@@ -124,18 +124,24 @@
       background-position: center;
     }
     .hero-layer--clean {
+      /* Clear sky through squeegee stroke — "after" */
       background-image:
-        linear-gradient(135deg, rgba(62, 95, 224, 0.55), rgba(62, 95, 224, 0.35)),
-        url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80');
+        linear-gradient(135deg, rgba(62, 95, 224, 0.28), rgba(10, 10, 10, 0.18)),
+        url('./assets/hero-clean-alt.jpg?v=4');
+      background-size: cover;
+      background-position: center;
       will-change: clip-path;
       clip-path: inset(0 calc(100% - var(--hero-split)) 0 0);
       z-index: 2;
     }
     .hero-layer--foggy {
+      /* Soapy foam scrub — "before" */
       background-image:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(242, 242, 242, 0.45)),
-        url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80');
-      filter: saturate(0.35) brightness(1.15);
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(10, 10, 10, 0.2)),
+        url('./assets/hero-soapy.jpg?v=4');
+      background-size: cover;
+      background-position: center;
+      filter: none;
       z-index: 1;
     }
     .hero-divider {
@@ -526,8 +532,8 @@
   <main id="main">
     <!-- ========== HERO ========== -->
     <section id="home" class="hero-section mt-[4.5rem]" aria-label="Hero — before and after window cleaning">
-      <div class="hero-layer hero-layer--foggy" role="img" aria-label="Foggy window before cleaning"></div>
-      <div class="hero-layer hero-layer--clean" id="hero-clean" role="img" aria-label="Clean window after professional cleaning"></div>
+      <div class="hero-layer hero-layer--foggy" role="img" aria-label="Soapy window being scrubbed before cleaning"></div>
+      <div class="hero-layer hero-layer--clean" id="hero-clean" role="img" aria-label="Squeegee revealing crystal-clear glass and blue sky"></div>
 
       <div class="hero-divider" id="hero-divider" role="slider" aria-label="Drag to compare clean and foggy windows" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" tabindex="0">
         <div class="hero-handle" aria-hidden="true">
