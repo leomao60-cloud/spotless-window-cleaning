@@ -13,7 +13,7 @@ First-year professional window cleaning business serving **Fresno, CA**.
 - Scroll-reveal animations and animated stats counters
 - Organized services: Residential · Commercial · Power Washing
 - Working testimonial carousel (auto-advance, dots, swipe)
-- Book Now modal (FormSubmit → `hello@spotlesswindows.com`)
+- Book Now modal (FormSubmit → `jerrenmao3@gmail.com`)
 - Hover FX: glow cursor, magnetic buttons, 3D tilt cards
 - 4K-class photos with responsive `srcset`
 - Mobile sticky Call / Book bar
