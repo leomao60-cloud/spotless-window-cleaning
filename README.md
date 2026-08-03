@@ -1,6 +1,8 @@
-# SPOTLESS — Window Cleaning Landing Page
+# Solidify Window — Landing Page
 
 Fresno’s newest professional window cleaning team — precision, not shortcuts.
+
+**Business name:** Solidify Window  
 
 **Live site:** https://leomao60-cloud.github.io/spotless-window-cleaning/
 
@@ -30,12 +32,4 @@ Fresno’s newest professional window cleaning team — precision, not shortcuts
 ```bash
 cd /Users/smao/Downloads/spotless-window-cleaning
 python3 -m http.server 8080
-# open http://localhost:8080
 ```
-
-## After deploy checklist
-
-1. Hard-refresh the live site (`Cmd+Shift+R`) and confirm phone/email  
-2. Submit a test booking once — check **jerrenmao3@gmail.com** for FormSubmit’s activation email and click confirm  
-3. Test **Call** on a phone (`tel:5592875083`)  
-4. Optional: replace placeholder testimonials with real reviews  
