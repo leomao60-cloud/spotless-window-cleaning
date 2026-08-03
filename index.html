@@ -1360,6 +1360,7 @@
   </div>
 
   <!-- ========== BOOK NOW MODAL ========== -->
+  <div id="book" class="sr-only" aria-hidden="true"></div>
   <div id="book-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
     <div class="modal-panel" role="document">
       <div class="flex items-start justify-between mb-5">
@@ -1442,7 +1443,8 @@
     const $ = (sel, ctx = document) => ctx.querySelector(sel);
     const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 
     // Booking date: no past days
     (function setMinBookingDate() {
@@ -1498,7 +1500,10 @@
       function onUp() {
         if (!dragging) return;
         dragging = false;
-        section.releasePointerCapture && section._pointerId != null && section.releasePointerCapture(section._pointerId);
+        if (section._pointerId != null && section.releasePointerCapture) {
+          try { section.releasePointerCapture(section._pointerId); } catch (_) { /* ignore */ }
+          section._pointerId = null;
+        }
         // Snap-back near center
         if (Math.abs(split - 50) < 6 && !prefersReducedMotion) {
           setSplit(50, true);
@@ -1594,24 +1599,37 @@
         document.body.style.overflow = 'hidden';
         closeBtn.focus();
       }
-      function closeMenu() {
+      function closeMenu(opts = {}) {
+        const { restoreFocus = true, unlockScroll = true } = opts;
         mobileNav.classList.remove('is-open');
         toggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+        // Don't unlock body scroll if booking modal is open (prevents scroll-under-modal bug)
+        const modalOpen = document.getElementById('book-modal')?.classList.contains('is-open');
+        if (unlockScroll && !modalOpen) {
+          document.body.style.overflow = '';
+        }
         setTimeout(() => { mobileNav.hidden = true; }, 300);
-        toggle.focus();
+        if (restoreFocus && !modalOpen) toggle.focus();
       }
 
       toggle.addEventListener('click', openMenu);
       closeBtn.addEventListener('click', closeMenu);
       $$('[data-mobile-link]').forEach((a) => {
         a.addEventListener('click', () => {
-          if (!a.classList.contains('book-trigger')) closeMenu();
-          else closeMenu();
+          // Opening Book Online: close menu without fighting modal focus/scroll
+          if (a.classList.contains('book-trigger')) {
+            closeMenu({ restoreFocus: false, unlockScroll: false });
+          } else {
+            closeMenu();
+          }
         });
       });
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileNav.classList.contains('is-open')) closeMenu();
+        if (e.key === 'Escape' && mobileNav.classList.contains('is-open')) {
+          // Prefer closing modal if both somehow open
+          if (document.getElementById('book-modal')?.classList.contains('is-open')) return;
+          closeMenu();
+        }
       });
     })();
 
@@ -1651,7 +1669,7 @@
     (function initTestimonials() {
       const testimonials = [
         { quote: "Booked Solidify Window for our storefront in their first month—customers noticed the glass the next morning. Reliable, fast, and truly streak-free.", name: "Marian S." },
-        { quote: "As a new local team they still showed up on time, protected our floors, and left every pane spotless. Booking was easy and communication was clear.", name: "James T." },
+        { quote: "As a new local team they still showed up on time, protected our floors, and left every pane streak-free. Booking was easy and communication was clear.", name: "James T." },
         { quote: "They cleaned every pane on our two-story home inside and out. No streaks, no mess—exactly what you want from a first-year crew that’s hungry to earn trust.", name: "Priya K." },
         { quote: "Professional crew, eco-friendly products, and our office windows have never looked better. You’d never guess they’re a first-year team—the care really shows.", name: "Derek L." },
         { quote: "From power washing the driveway to every interior pane—one call handled it all. Proud to support a new Fresno business. Crystal-clear results every time.", name: "Angela R." },
@@ -1662,7 +1680,7 @@
       const prevBtn = $('#testimonial-prev');
       const nextBtn = $('#testimonial-next');
       const section = $('#testimonials');
-      if (!viewport) return;
+      if (!viewport || !dotsWrap || !prevBtn || !nextBtn || !section) return;
 
       let index = 0;
       let timer = null;
@@ -1761,6 +1779,8 @@
       function animate(el) {
         const target = parseInt(el.dataset.target, 10);
         const suffix = el.dataset.suffix || '';
+        // Avoid mid-animation glitches like "0st" — only attach ordinal after final value
+        const ordinal = suffix === 'st' || suffix === 'nd' || suffix === 'rd' || suffix === 'th';
         if (prefersReducedMotion) {
           el.textContent = target + suffix;
           return;
@@ -1770,7 +1790,8 @@
         function tick(now) {
           const t = Math.min(1, (now - start) / duration);
           const eased = 1 - Math.pow(1 - t, 3);
-          el.textContent = Math.round(target * eased) + suffix;
+          const n = Math.round(target * eased);
+          el.textContent = ordinal ? (t < 1 ? String(n) : n + suffix) : n + suffix;
           if (t < 1) requestAnimationFrame(tick);
         }
         requestAnimationFrame(tick);
@@ -1812,6 +1833,14 @@
       function openModal(e) {
         if (e) e.preventDefault();
         lastFocus = document.activeElement;
+        // Close mobile nav cleanly if open
+        const mobileNav = document.getElementById('mobile-nav');
+        if (mobileNav && mobileNav.classList.contains('is-open')) {
+          mobileNav.classList.remove('is-open');
+          const menuToggle = document.getElementById('menu-toggle');
+          if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
+          setTimeout(() => { mobileNav.hidden = true; }, 300);
+        }
         modal.hidden = false;
         void modal.offsetWidth;
         modal.classList.add('is-open');
@@ -1819,18 +1848,30 @@
         form.classList.remove('hidden');
         success.classList.add('hidden');
         form.reset();
+        // Re-assert FormSubmit hidden defaults after reset (some browsers clear them)
+        const subject = form.querySelector('input[name="_subject"]');
+        const template = form.querySelector('input[name="_template"]');
+        const captcha = form.querySelector('input[name="_captcha"]');
+        if (subject) subject.value = 'Solidify Window booking request';
+        if (template) template.value = 'table';
+        if (captcha) captcha.value = 'false';
         $$('.field-error', form).forEach((el) => el.classList.add('hidden'));
         $$('input, select, textarea', form).forEach((el) => {
           el.classList.remove('border-red-500');
         });
-        setTimeout(() => $('#book-name').focus(), 50);
+        setTimeout(() => {
+          const nameField = $('#book-name');
+          if (nameField) nameField.focus();
+        }, 50);
       }
 
       function closeModal() {
         modal.classList.remove('is-open');
         document.body.style.overflow = '';
         setTimeout(() => { modal.hidden = true; }, 250);
-        if (lastFocus) lastFocus.focus();
+        if (lastFocus && typeof lastFocus.focus === 'function') {
+          try { lastFocus.focus(); } catch (_) { /* ignore */ }
+        }
       }
 
       triggers.forEach((btn) => btn.addEventListener('click', openModal));
