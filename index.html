@@ -457,6 +457,52 @@
       margin: 0 auto 2rem;
     }
 
+    /* ========== Hover demos: glow cursor, magnetic btn, 3D tilt ========== */
+    #cursor-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(62, 95, 224, 0.55), rgba(62, 95, 224, 0) 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      opacity: 0;
+      transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, opacity 0.2s ease;
+      mix-blend-mode: normal;
+    }
+    #cursor-glow.is-on { opacity: 1; }
+    #cursor-glow.big {
+      width: 70px;
+      height: 70px;
+      background: radial-gradient(circle, rgba(62, 95, 224, 0.35), rgba(62, 95, 224, 0) 70%);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      body.has-glow-cursor { cursor: none; }
+      body.has-glow-cursor a,
+      body.has-glow-cursor button,
+      body.has-glow-cursor [role="button"],
+      body.has-glow-cursor input,
+      body.has-glow-cursor select,
+      body.has-glow-cursor textarea {
+        cursor: none;
+      }
+    }
+    .magnetic-btn {
+      will-change: transform;
+      transition: transform 0.15s ease-out, box-shadow 0.2s ease, background-color 0.18s ease;
+    }
+    .tilt-card {
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+    }
+    .tilt-card .tilt-inner {
+      transform: translateZ(28px);
+    }
+
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -466,12 +512,15 @@
       .testimonial-slide,
       .service-card .service-icon,
       .btn-lift,
+      .magnetic-btn,
+      .tilt-card,
       .mobile-nav,
       .mobile-nav a,
       .modal-backdrop,
       .modal-panel,
       #site-header,
-      .header-inner {
+      .header-inner,
+      #cursor-glow {
         transition: none !important;
         animation: none !important;
       }
@@ -479,10 +528,13 @@
         opacity: 1;
         transform: none;
       }
+      #cursor-glow { display: none !important; }
+      body.has-glow-cursor { cursor: auto !important; }
     }
   </style>
 </head>
 <body class="bg-white antialiased">
+  <div id="cursor-glow" aria-hidden="true"></div>
 
   <!-- ========== HEADER / NAV ========== -->
   <header id="site-header" class="fixed top-0 left-0 right-0 z-40 bg-white">
@@ -581,7 +633,7 @@
       </div>
 
       <div class="hero-content">
-        <a href="#book" class="book-now-hero book-trigger absolute top-5 left-4 sm:left-8 btn-lift inline-flex items-center px-5 py-2 rounded-full bg-ink text-white text-xs sm:text-sm font-semibold tracking-wide shadow-lg">
+        <a href="#book" data-magnetic class="book-now-hero book-trigger magnetic-btn absolute top-5 left-4 sm:left-8 btn-lift inline-flex items-center px-5 py-2 rounded-full bg-ink text-white text-xs sm:text-sm font-semibold tracking-wide shadow-lg">
           Book Now
         </a>
         <p class="hero-headline text-white/95 text-xs sm:text-sm font-normal tracking-[0.25em] uppercase mb-3">
@@ -607,16 +659,18 @@
         <div class="reveal-about grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div class="about-frame-wrap mx-auto md:mx-0">
             <div class="about-frame" aria-hidden="true"></div>
-            <img
-              class="about-photo"
-              src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/about-squeegee.jpg?v=6"
-              alt="Professional gloved hand using a blue squeegee to clean a wet window"
-              width="736"
-              height="736"
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-            />
+            <div class="tilt-card rounded-none overflow-visible" data-tilt style="width:100%;height:auto;background:transparent;box-shadow:none;padding:0;">
+              <img
+                class="about-photo tilt-inner"
+                src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/about-squeegee.jpg?v=6"
+                alt="Professional gloved hand using a blue squeegee to clean a wet window"
+                width="736"
+                height="736"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </div>
           </div>
 
           <div class="reveal">
@@ -627,7 +681,7 @@
               <p>We serve residential neighborhoods and commercial properties across Fresno, CA, with flexible scheduling, fully insured crews, and a 100% satisfaction guarantee on every job.</p>
               <p>From high-rise glass to solar arrays and exterior power washing, one trusted team handles it all—so you can focus on what matters while we make your property shine.</p>
             </div>
-            <button type="button" id="read-more-btn" class="btn-lift inline-flex items-center px-6 py-2.5 rounded-full bg-primary text-white text-sm font-semibold tracking-wide" aria-expanded="false" aria-controls="about-extra">
+            <button type="button" id="read-more-btn" data-magnetic class="magnetic-btn btn-lift inline-flex items-center px-6 py-2.5 rounded-full bg-primary text-white text-sm font-semibold tracking-wide" aria-expanded="false" aria-controls="about-extra">
               Read More
             </button>
           </div>
@@ -635,16 +689,16 @@
 
         <!-- Photo process strip — user-provided cleaning images -->
         <div class="reveal mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-          <figure class="overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]">
-            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-soapy.jpg?v=6" alt="Scrubbing soapy foam onto glass with a professional washer" class="w-full h-full object-cover" width="600" height="600" loading="lazy" />
+          <figure class="tilt-card overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]" data-tilt style="width:100%;height:auto;padding:0;background:#E4E4E4;">
+            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-soapy.jpg?v=6" alt="Scrubbing soapy foam onto glass with a professional washer" class="tilt-inner w-full h-full object-cover" width="600" height="600" loading="lazy" />
             <figcaption class="sr-only">Soap and scrub</figcaption>
           </figure>
-          <figure class="overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]">
-            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/service-scrubber.jpg?v=6" alt="Dual-head window washing tool scrubbing glass" class="w-full h-full object-cover" width="736" height="794" loading="lazy" />
+          <figure class="tilt-card overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]" data-tilt style="width:100%;height:auto;padding:0;background:#E4E4E4;">
+            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/service-scrubber.jpg?v=6" alt="Dual-head window washing tool scrubbing glass" class="tilt-inner w-full h-full object-cover" width="736" height="794" loading="lazy" />
             <figcaption class="sr-only">Professional scrubber</figcaption>
           </figure>
-          <figure class="overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]">
-            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-clean-alt.jpg?v=6" alt="Squeegee revealing clear blue sky through clean glass" class="w-full h-full object-cover" width="736" height="736" loading="lazy" />
+          <figure class="tilt-card overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]" data-tilt style="width:100%;height:auto;padding:0;background:#E4E4E4;">
+            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-clean-alt.jpg?v=6" alt="Squeegee revealing clear blue sky through clean glass" class="tilt-inner w-full h-full object-cover" width="736" height="736" loading="lazy" />
             <figcaption class="sr-only">Crystal clear finish</figcaption>
           </figure>
         </div>
@@ -663,7 +717,8 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-14">
           <!-- Residential -->
-          <article class="service-card reveal text-center px-4">
+          <article class="service-card tilt-card reveal text-center px-4 py-6 rounded-2xl bg-white/50" data-tilt>
+            <div class="tilt-inner">
             <div class="service-icon mx-auto mb-5 w-16 h-16 flex items-center justify-center text-primary">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M8 22L24 8l16 14" />
@@ -673,10 +728,12 @@
             </div>
             <h3 class="font-extrabold uppercase tracking-wider text-ink mb-2">Residential</h3>
             <p class="text-sm text-gray-500 leading-relaxed">Streak-free interior &amp; exterior panes for homes of every size.</p>
+            </div>
           </article>
 
           <!-- Commercial -->
-          <article class="service-card reveal text-center px-4">
+          <article class="service-card tilt-card reveal text-center px-4 py-6 rounded-2xl bg-white/50" data-tilt>
+            <div class="tilt-inner">
             <div class="service-icon mx-auto mb-5 w-16 h-16 flex items-center justify-center text-primary">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="10" y="8" width="28" height="32" rx="1" />
@@ -686,10 +743,12 @@
             </div>
             <h3 class="font-extrabold uppercase tracking-wider text-ink mb-2">Commercial</h3>
             <p class="text-sm text-gray-500 leading-relaxed">Storefronts, offices &amp; multi-story glass—scheduled around you.</p>
+            </div>
           </article>
 
           <!-- Power Washing -->
-          <article class="service-card reveal text-center px-4">
+          <article class="service-card tilt-card reveal text-center px-4 py-6 rounded-2xl bg-white/50" data-tilt>
+            <div class="tilt-inner">
             <div class="service-icon mx-auto mb-5 w-16 h-16 flex items-center justify-center text-primary">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M12 36c4-8 8-12 12-14" />
@@ -700,10 +759,12 @@
             </div>
             <h3 class="font-extrabold uppercase tracking-wider text-ink mb-2">Power Washing</h3>
             <p class="text-sm text-gray-500 leading-relaxed">Restore siding, driveways &amp; exteriors with controlled pressure.</p>
+            </div>
           </article>
 
           <!-- Solar Panel Cleaning -->
-          <article class="service-card reveal text-center px-4">
+          <article class="service-card tilt-card reveal text-center px-4 py-6 rounded-2xl bg-white/50" data-tilt>
+            <div class="tilt-inner">
             <div class="service-icon mx-auto mb-5 w-16 h-16 flex items-center justify-center text-primary">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="24" cy="14" r="5" />
@@ -714,11 +775,12 @@
             </div>
             <h3 class="font-extrabold uppercase tracking-wider text-ink mb-2">Solar Panel Cleaning</h3>
             <p class="text-sm text-gray-500 leading-relaxed">Maximize output with safe, residue-free panel maintenance.</p>
+            </div>
           </article>
         </div>
 
         <div class="reveal text-center">
-          <button type="button" class="book-trigger btn-lift inline-flex items-center px-8 py-3 rounded-full bg-primary text-white text-sm font-semibold tracking-wide">
+          <button type="button" data-magnetic class="book-trigger magnetic-btn btn-lift inline-flex items-center px-8 py-3 rounded-full bg-primary text-white text-sm font-semibold tracking-wide">
             Book Now
           </button>
         </div>
@@ -1438,6 +1500,79 @@
         extra.classList.toggle('hidden', open);
         btn.setAttribute('aria-expanded', open ? 'false' : 'true');
         btn.textContent = open ? 'Read More' : 'Read Less';
+      });
+    })();
+
+    /* --------------------------------
+     * 8. HOVER FX — glow cursor, magnetic, 3D tilt
+     *    (from hover-animations-demo)
+     * -------------------------------- */
+    (function initHoverFx() {
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (prefersReducedMotion || !finePointer) return;
+
+      const glow = document.getElementById('cursor-glow');
+      if (!glow) return;
+
+      document.body.classList.add('has-glow-cursor');
+      let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+      let glowVisible = false;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!glowVisible) {
+          glowVisible = true;
+          glow.classList.add('is-on');
+          glowX = mouseX;
+          glowY = mouseY;
+        }
+      }, { passive: true });
+      document.addEventListener('mouseleave', () => {
+        glowVisible = false;
+        glow.classList.remove('is-on');
+      });
+
+      function animateGlow() {
+        glowX += (mouseX - glowX) * 0.18;
+        glowY += (mouseY - glowY) * 0.18;
+        glow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+        requestAnimationFrame(animateGlow);
+      }
+      animateGlow();
+
+      $$('[data-magnetic], [data-tilt], .book-trigger, button, a.btn-lift').forEach((el) => {
+        el.addEventListener('mouseenter', () => glow.classList.add('big'));
+        el.addEventListener('mouseleave', () => glow.classList.remove('big'));
+      });
+
+      // Magnetic buttons
+      $$('[data-magnetic]').forEach((btn) => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const relX = e.clientX - rect.left - rect.width / 2;
+          const relY = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${relX * 0.35}px, ${relY * 0.35}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translate(0, 0)';
+        });
+      });
+
+      // 3D tilt cards
+      $$('[data-tilt]').forEach((card) => {
+        const maxTilt = 12;
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width;
+          const py = (e.clientY - rect.top) / rect.height;
+          const rotateY = (px - 0.5) * maxTilt * 2;
+          const rotateX = (0.5 - py) * maxTilt * 2;
+          card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale(1)';
+        });
       });
     })();
 
