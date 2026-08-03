@@ -372,6 +372,12 @@
       opacity: 1;
       transform: translateY(0);
     }
+    /* About copy must always be readable (never stuck at opacity:0) */
+    #about .about-copy,
+    #about .about-copy.reveal {
+      opacity: 1 !important;
+      transform: none !important;
+    }
 
     /* Buttons micro-interactions */
     .btn-lift {
@@ -733,7 +739,7 @@
     <!-- ========== ABOUT ========== -->
     <section id="about" class="py-20 sm:py-28 bg-white" aria-labelledby="about-heading">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="reveal text-center">
+        <div class="about-copy text-center">
           <h2 id="about-heading" class="text-3xl sm:text-4xl md:text-5xl tracking-[0.12em] uppercase">
             <span class="font-extrabold text-primary">About</span>
             <span class="font-normal text-gray-400"> Us</span>
@@ -760,9 +766,9 @@
             </div>
           </div>
 
-          <div class="reveal">
+          <div class="about-copy" id="about-description">
             <p class="text-primary text-xs sm:text-sm font-bold tracking-[0.18em] uppercase mb-3">Fresno’s newest · Precision from day one</p>
-            <div class="text-gray-500 text-base sm:text-lg leading-relaxed space-y-4 mb-6">
+            <div class="text-gray-600 text-base sm:text-lg leading-relaxed space-y-4 mb-6">
               <p id="about-text">
                 SPOTLESS is Fresno’s newest window cleaning team—built from day one on precision, not shortcuts. Our trained technicians use pro-grade squeegees, scrubbers, and eco-friendly solutions to leave every pane streak-free—inside and out.
               </p>
