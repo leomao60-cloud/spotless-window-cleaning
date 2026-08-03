@@ -254,20 +254,112 @@
       opacity: 1 !important;
     }
 
-    /* Services split background */
+    /* Services section */
     .services-split {
-      background: linear-gradient(
-        to right,
-        #F2F2F2 0%,
-        #F2F2F2 50%,
-        #E4E4E4 50%,
-        #E4E4E4 100%
-      );
+      background: #F2F2F2;
     }
-    @media (max-width: 768px) {
-      .services-split {
-        background: #F2F2F2;
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) {
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
       }
+    }
+    @media (min-width: 1024px) {
+      .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.75rem;
+      }
+    }
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #fff;
+      border: 1px solid #E8E8E8;
+      border-radius: 1.25rem;
+      padding: 1.75rem 1.5rem 1.5rem;
+      text-align: left;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.15s ease-out;
+    }
+    .service-card:hover {
+      border-color: rgba(62, 95, 224, 0.35);
+      box-shadow: 0 16px 36px rgba(62, 95, 224, 0.12);
+    }
+    .service-card .service-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .service-card .service-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #A0A0A0;
+    }
+    .service-card .service-icon {
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: 0.9rem;
+      background: rgba(62, 95, 224, 0.1);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+    }
+    .service-card:hover .service-icon {
+      transform: rotate(-6deg) scale(1.06);
+      background: rgba(62, 95, 224, 0.16);
+    }
+    .service-card h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 0 0 0.6rem;
+    }
+    .service-card .service-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #6B7280;
+      margin: 0 0 1.1rem;
+      flex-grow: 1;
+    }
+    .service-card .service-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid #F0F0F0;
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .service-card .service-list li {
+      font-size: 0.8rem;
+      color: #4B5563;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.4;
+    }
+    .service-card .service-list li::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin-top: 0.4rem;
+      flex-shrink: 0;
     }
 
     /* Scroll reveal */
@@ -279,14 +371,6 @@
     .reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
-    }
-
-    /* Service icon hover */
-    .service-card .service-icon {
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .service-card:hover .service-icon {
-      transform: rotate(-8deg) scale(1.08);
     }
 
     /* Buttons micro-interactions */
@@ -705,68 +789,94 @@
       </div>
     </section>
 
-    <!-- ========== WHAT WE DO ========== -->
+    <!-- ========== WHAT WE DO / SERVICES ========== -->
     <section id="services" class="services-split py-20 sm:py-28" aria-labelledby="services-heading">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="reveal text-center mb-14">
+        <div class="reveal text-center mb-12 sm:mb-14">
           <h2 id="services-heading" class="text-3xl sm:text-4xl md:text-5xl tracking-[0.12em] uppercase">
             <span class="font-extrabold text-primary">What</span>
             <span class="font-normal text-gray-400"> We Do</span>
           </h2>
+          <p class="mt-4 max-w-xl mx-auto text-gray-500 text-sm sm:text-base leading-relaxed">
+            Three core services—clear pricing conversations, fully insured crews, and a streak-free finish every time.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8 mb-14 max-w-4xl mx-auto">
-          <!-- Residential -->
-          <article class="service-card tilt-card reveal text-center px-4 py-6 rounded-2xl bg-white/50" data-tilt>
-            <div class="tilt-inner">
-            <div class="service-icon mx-auto mb-5 w-16 h-16 flex items-center justify-center text-primary">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M8 22L24 8l16 14" />
-                <path d="M12 20v16h24V20" />
-                <path d="M20 36V26h8v10" />
-              </svg>
-            </div>
-            <h3 class="font-extrabold uppercase tracking-wider text-ink mb-2">Residential</h3>
-            <p class="text-sm text-gray-500 leading-relaxed">Streak-free interior &amp; exterior panes for homes of every size.</p>
-            </div>
-          </article>
-
-          <!-- Commercial -->
-          <article class="service-card tilt-card reveal text-center px-4 py-6 rounded-2xl bg-white/50" data-tilt>
-            <div class="tilt-inner">
-            <div class="service-icon mx-auto mb-5 w-16 h-16 flex items-center justify-center text-primary">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="10" y="8" width="28" height="32" rx="1" />
-                <path d="M16 14h4M24 14h4M32 14h2M16 22h4M24 22h4M32 22h2M16 30h4M24 30h4M32 30h2" />
-                <path d="M20 40v-6h8v6" />
-              </svg>
-            </div>
-            <h3 class="font-extrabold uppercase tracking-wider text-ink mb-2">Commercial</h3>
-            <p class="text-sm text-gray-500 leading-relaxed">Storefronts, offices &amp; multi-story glass—scheduled around you.</p>
+        <div class="services-grid mb-12 sm:mb-14">
+          <!-- 01 Residential -->
+          <article class="service-card tilt-card reveal" data-tilt>
+            <div class="tilt-inner flex flex-col h-full">
+              <div class="service-top">
+                <span class="service-num">01</span>
+                <div class="service-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 22L24 8l16 14" />
+                    <path d="M12 20v16h24V20" />
+                    <path d="M20 36V26h8v10" />
+                  </svg>
+                </div>
+              </div>
+              <h3>Residential</h3>
+              <p class="service-desc">Streak-free interior and exterior window cleaning for homes of every size across Fresno.</p>
+              <ul class="service-list">
+                <li>Interior &amp; exterior panes</li>
+                <li>Screens, tracks &amp; sills</li>
+                <li>Single-family &amp; multi-story homes</li>
+              </ul>
             </div>
           </article>
 
-          <!-- Power Washing -->
-          <article class="service-card tilt-card reveal text-center px-4 py-6 rounded-2xl bg-white/50" data-tilt>
-            <div class="tilt-inner">
-            <div class="service-icon mx-auto mb-5 w-16 h-16 flex items-center justify-center text-primary">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 36c4-8 8-12 12-14" />
-                <path d="M28 10l8 4-10 18-8-4 10-18z" />
-                <path d="M14 38c2 2 6 2 8 0" />
-                <path d="M10 40h4M8 36h3" opacity="0.6" />
-              </svg>
-            </div>
-            <h3 class="font-extrabold uppercase tracking-wider text-ink mb-2">Power Washing</h3>
-            <p class="text-sm text-gray-500 leading-relaxed">Restore siding, driveways &amp; exteriors with controlled pressure.</p>
+          <!-- 02 Commercial -->
+          <article class="service-card tilt-card reveal" data-tilt>
+            <div class="tilt-inner flex flex-col h-full">
+              <div class="service-top">
+                <span class="service-num">02</span>
+                <div class="service-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="10" y="8" width="28" height="32" rx="1" />
+                    <path d="M16 14h4M24 14h4M32 14h2M16 22h4M24 22h4M32 22h2M16 30h4M24 30h4M32 30h2" />
+                    <path d="M20 40v-6h8v6" />
+                  </svg>
+                </div>
+              </div>
+              <h3>Commercial</h3>
+              <p class="service-desc">Storefronts, offices, and multi-story glass on a schedule that fits your business hours.</p>
+              <ul class="service-list">
+                <li>Storefronts &amp; office buildings</li>
+                <li>Recurring maintenance plans</li>
+                <li>After-hours &amp; weekend options</li>
+              </ul>
             </div>
           </article>
 
+          <!-- 03 Power Washing -->
+          <article class="service-card tilt-card reveal" data-tilt>
+            <div class="tilt-inner flex flex-col h-full">
+              <div class="service-top">
+                <span class="service-num">03</span>
+                <div class="service-icon" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 36c4-8 8-12 12-14" />
+                    <path d="M28 10l8 4-10 18-8-4 10-18z" />
+                    <path d="M14 38c2 2 6 2 8 0" />
+                    <path d="M10 40h4M8 36h3" opacity="0.6" />
+                  </svg>
+                </div>
+              </div>
+              <h3>Power Washing</h3>
+              <p class="service-desc">Restore siding, driveways, and exteriors with controlled pressure and care for surfaces.</p>
+              <ul class="service-list">
+                <li>Siding, decks &amp; walkways</li>
+                <li>Driveways &amp; entryways</li>
+                <li>Safe pressure for each surface</li>
+              </ul>
+            </div>
+          </article>
         </div>
 
         <div class="reveal text-center">
           <button type="button" data-magnetic class="book-trigger magnetic-btn btn-lift inline-flex items-center px-8 py-3 rounded-full bg-primary text-white text-sm font-semibold tracking-wide">
-            Book Now
+            Book a Service
           </button>
         </div>
       </div>
