@@ -8,15 +8,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SPOTLESS | Professional & Reliable Window Cleaning in Fresno, CA</title>
-  <meta name="description" content="SPOTLESS is a new, professional window cleaning team in Fresno, CA. Residential, commercial & power washing—streak-free results from day one. Book online today." />
+  <meta name="description" content="SPOTLESS is Fresno’s newest window cleaning team—precision, not shortcuts. Residential, commercial & power washing. Call 559-287-5083 or book online." />
   <meta name="theme-color" content="#3E5FE0" />
+  <link rel="canonical" href="https://leomao60-cloud.github.io/spotless-window-cleaning/" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://leomao60-cloud.github.io/spotless-window-cleaning/" />
   <meta property="og:title" content="SPOTLESS | Professional & Reliable Window Cleaning" />
-  <meta property="og:description" content="New local window cleaning in Fresno, CA. Residential, commercial & power washing—book your first clean today." />
+  <meta property="og:description" content="Fresno’s newest window cleaning team. Residential, commercial & power washing. Call 559-287-5083." />
   <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content="SPOTLESS" />
+  <meta property="og:image" content="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/about-squeegee-md.jpg?v=7" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SPOTLESS | Window Cleaning Fresno, CA" />
+  <meta name="twitter:description" content="Fresno’s newest window cleaning team. Call 559-287-5083." />
+  <meta name="twitter:image" content="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/about-squeegee-md.jpg?v=7" />
 
   <!-- SVG Favicon — squeegee -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230A0A0A'/%3E%3Cpath d='M8 10h16v3H8zm2 4h12l-1 12H11z' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M12 7h8' stroke='%233E5FE0' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
@@ -1075,8 +1082,8 @@
 
   <!-- ========== MOBILE BOTTOM CTA BAR ========== -->
   <div class="mobile-cta-bar" role="region" aria-label="Quick actions">
-    <a href="tel:5592875083" class="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-full bg-emerald-500 text-white text-sm font-bold">
-      Call Now
+    <a href="tel:5592875083" class="flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-full bg-emerald-500 text-white text-sm font-bold" aria-label="Call 559-287-5083">
+      Call 559-287-5083
     </a>
     <button type="button" class="book-trigger flex-1 inline-flex items-center justify-center gap-2 py-3 rounded-full bg-primary text-white text-sm font-bold">
       Book Now
@@ -1094,6 +1101,11 @@
       </div>
 
       <form id="book-form" novalidate>
+        <!-- FormSubmit helpers -->
+        <input type="hidden" name="_subject" value="SPOTLESS booking request" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" />
         <div class="space-y-4">
           <div>
             <label for="book-name" class="block text-sm font-semibold text-ink mb-1">Name <span class="text-red-500">*</span></label>
@@ -1107,7 +1119,7 @@
           </div>
           <div>
             <label for="book-email" class="block text-sm font-semibold text-ink mb-1">Email <span class="text-red-500">*</span></label>
-            <input type="email" id="book-email" name="email" required autocomplete="email" class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-primary" placeholder="you@example.com" />
+            <input type="email" id="book-email" name="email" required autocomplete="email" class="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm focus:border-primary" placeholder="you@email.com" />
             <p class="field-error hidden text-xs text-red-500 mt-1">Please enter a valid email.</p>
           </div>
           <div>
@@ -1604,11 +1616,10 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Sending…';
 
-        // FormSubmit — free email delivery (confirm once at jerrenmao3@gmail.com)
+        // FormSubmit — delivers to jerrenmao3@gmail.com (confirm once via their email)
         const payload = new FormData(form);
-        payload.append('_subject', 'SPOTLESS booking request');
-        payload.append('_template', 'table');
-        payload.append('_captcha', 'false');
+        const customerEmail = ($('#book-email') || {}).value || '';
+        if (customerEmail) payload.set('_replyto', customerEmail);
 
         try {
           const res = await fetch('https://formsubmit.co/ajax/jerrenmao3@gmail.com', {
@@ -1621,8 +1632,16 @@
           success.classList.remove('hidden');
           successClose.focus();
         } catch (_) {
-          // Offline / blocked: still show success UX so demos work; log for debug
-          console.warn('FormSubmit unavailable — showing local success state');
+          // Fallback: open mail client so the lead is not lost
+          const name = ($('#book-name') || {}).value || '';
+          const phone = ($('#book-phone') || {}).value || '';
+          const service = ($('#book-service') || {}).value || '';
+          const date = ($('#book-date') || {}).value || '';
+          const message = ($('#book-message') || {}).value || '';
+          const body = encodeURIComponent(
+            `Name: ${name}\nPhone: ${phone}\nEmail: ${customerEmail}\nService: ${service}\nPreferred date: ${date}\n\n${message}`
+          );
+          window.location.href = `mailto:jerrenmao3@gmail.com?subject=${encodeURIComponent('SPOTLESS booking request')}&body=${body}`;
           form.classList.add('hidden');
           success.classList.remove('hidden');
           successClose.focus();
