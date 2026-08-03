@@ -21,6 +21,11 @@
   <!-- SVG Favicon — squeegee -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230A0A0A'/%3E%3Cpath d='M8 10h16v3H8zm2 4h12l-1 12H11z' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M12 7h8' stroke='%233E5FE0' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
 
+  <!-- Preload hero photos (absolute URLs so they always resolve on GitHub Pages) -->
+  <link rel="preload" as="image" href="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-soapy.jpg?v=6" />
+  <link rel="preload" as="image" href="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-clean-alt.jpg?v=6" />
+  <link rel="preload" as="image" href="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/about-squeegee.jpg?v=6" />
+
   <!-- Google Fonts: Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -109,40 +114,49 @@
       transition: height 0.25s ease;
     }
 
-    /* Hero split-drag */
+    /* Hero split-drag — real <img> tags (more reliable than CSS backgrounds) */
     .hero-section {
       height: clamp(560px, 70vh, 650px);
       position: relative;
       overflow: hidden;
       user-select: none;
       touch-action: none;
+      background: #1a2744;
     }
     .hero-layer {
       position: absolute;
       inset: 0;
-      background-size: cover;
-      background-position: center;
+      overflow: hidden;
+    }
+    .hero-layer img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      border: 0;
+    }
+    .hero-layer__shade {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
     }
     .hero-layer--clean {
-      /* Clear sky through squeegee stroke — "after" */
-      background-image:
-        linear-gradient(135deg, rgba(62, 95, 224, 0.28), rgba(10, 10, 10, 0.18)),
-        url('./assets/hero-clean-alt.jpg?v=4');
-      background-size: cover;
-      background-position: center;
       will-change: clip-path;
       clip-path: inset(0 calc(100% - var(--hero-split)) 0 0);
       z-index: 2;
     }
+    .hero-layer--clean .hero-layer__shade {
+      background: linear-gradient(135deg, rgba(62, 95, 224, 0.22), rgba(10, 10, 10, 0.15));
+    }
     .hero-layer--foggy {
-      /* Soapy foam scrub — "before" */
-      background-image:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(10, 10, 10, 0.2)),
-        url('./assets/hero-soapy.jpg?v=4');
-      background-size: cover;
-      background-position: center;
-      filter: none;
       z-index: 1;
+    }
+    .hero-layer--foggy .hero-layer__shade {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(10, 10, 10, 0.18));
     }
     .hero-divider {
       position: absolute;
@@ -532,8 +546,28 @@
   <main id="main">
     <!-- ========== HERO ========== -->
     <section id="home" class="hero-section mt-[4.5rem]" aria-label="Hero — before and after window cleaning">
-      <div class="hero-layer hero-layer--foggy" role="img" aria-label="Soapy window being scrubbed before cleaning"></div>
-      <div class="hero-layer hero-layer--clean" id="hero-clean" role="img" aria-label="Squeegee revealing crystal-clear glass and blue sky"></div>
+      <div class="hero-layer hero-layer--foggy">
+        <img
+          src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-soapy.jpg?v=6"
+          alt="Soapy window being scrubbed before cleaning"
+          width="600"
+          height="600"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <div class="hero-layer__shade" aria-hidden="true"></div>
+      </div>
+      <div class="hero-layer hero-layer--clean" id="hero-clean">
+        <img
+          src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-clean-alt.jpg?v=6"
+          alt="Squeegee revealing crystal-clear glass and blue sky"
+          width="736"
+          height="736"
+          decoding="async"
+          fetchpriority="high"
+        />
+        <div class="hero-layer__shade" aria-hidden="true"></div>
+      </div>
 
       <div class="hero-divider" id="hero-divider" role="slider" aria-label="Drag to compare clean and foggy windows" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" tabindex="0">
         <div class="hero-handle" aria-hidden="true">
@@ -575,7 +609,7 @@
             <div class="about-frame" aria-hidden="true"></div>
             <img
               class="about-photo"
-              src="./assets/about-squeegee.jpg?v=5"
+              src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/about-squeegee.jpg?v=6"
               alt="Professional gloved hand using a blue squeegee to clean a wet window"
               width="736"
               height="736"
@@ -602,15 +636,15 @@
         <!-- Photo process strip — user-provided cleaning images -->
         <div class="reveal mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
           <figure class="overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]">
-            <img src="./assets/hero-soapy.jpg?v=5" alt="Scrubbing soapy foam onto glass with a professional washer" class="w-full h-full object-cover" width="600" height="600" loading="lazy" />
+            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-soapy.jpg?v=6" alt="Scrubbing soapy foam onto glass with a professional washer" class="w-full h-full object-cover" width="600" height="600" loading="lazy" />
             <figcaption class="sr-only">Soap and scrub</figcaption>
           </figure>
           <figure class="overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]">
-            <img src="./assets/service-scrubber.jpg?v=5" alt="Dual-head window washing tool scrubbing glass" class="w-full h-full object-cover" width="736" height="794" loading="lazy" />
+            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/service-scrubber.jpg?v=6" alt="Dual-head window washing tool scrubbing glass" class="w-full h-full object-cover" width="736" height="794" loading="lazy" />
             <figcaption class="sr-only">Professional scrubber</figcaption>
           </figure>
           <figure class="overflow-hidden rounded-2xl shadow-md bg-mist aspect-[4/3]">
-            <img src="./assets/hero-clean-alt.jpg?v=5" alt="Squeegee revealing clear blue sky through clean glass" class="w-full h-full object-cover" width="736" height="736" loading="lazy" />
+            <img src="https://leomao60-cloud.github.io/spotless-window-cleaning/assets/hero-clean-alt.jpg?v=6" alt="Squeegee revealing clear blue sky through clean glass" class="w-full h-full object-cover" width="736" height="736" loading="lazy" />
             <figcaption class="sr-only">Crystal clear finish</figcaption>
           </figure>
         </div>
