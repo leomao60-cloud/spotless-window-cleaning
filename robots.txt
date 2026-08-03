@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://leomao60-cloud.github.io/spotless-window-cleaning/sitemap.xml
