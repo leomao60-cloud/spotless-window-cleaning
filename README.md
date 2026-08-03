@@ -1,29 +1,42 @@
 # SPOTLESS — Window Cleaning Landing Page
 
-Single-file production landing page for a professional window cleaning business.
+First-year professional window cleaning business serving **Fresno, CA**.
 
-**Live file:** open [`index.html`](./index.html) in a browser (no build step).
+**Live site:** https://leomao60-cloud.github.io/spotless-window-cleaning/
+
+**Repo:** https://github.com/leomao60-cloud/spotless-window-cleaning
 
 ## Features
 
 - Split-screen hero with **draggable before/after** divider
 - Sticky nav with scrollspy + mobile hamburger overlay
 - Scroll-reveal animations and animated stats counters
+- Organized services: Residential · Commercial · Power Washing
 - Working testimonial carousel (auto-advance, dots, swipe)
-- Book Now modal with client-side validation
+- Book Now modal (FormSubmit → `hello@spotlesswindows.com`)
+- Hover FX: glow cursor, magnetic buttons, 3D tilt cards
+- 4K-class photos with responsive `srcset`
 - Mobile sticky Call / Book bar
-- LocalBusiness JSON-LD, Open Graph meta, accessibility basics
+- LocalBusiness JSON-LD, Open Graph, accessibility basics
 
 ## Stack
 
-- HTML5 + Tailwind CSS (CDN)
-- Vanilla JavaScript
+- Single `index.html` (no build step)
+- Tailwind CSS (CDN) + vanilla JavaScript
 - Google Fonts (Poppins)
 
-## Deploy
+## Local preview
 
-Drop `index.html` on Netlify, Vercel, Cloudflare Pages, or GitHub Pages.
+Open `index.html` in a browser, or serve the folder:
 
-## Business placeholders
+```bash
+cd /Users/smao/Downloads/spotless-window-cleaning
+python3 -m http.server 8080
+```
 
-Update phone, email, city, and copy in `index.html` before going live. Connect the booking form to Formspree, Web3Forms, or Netlify Forms for real submissions.
+## Before going fully live
+
+1. Replace phone, email, and FormSubmit address with real business contacts  
+2. Swap placeholder testimonials for real reviews (with permission)  
+3. Confirm FormSubmit email once from the inbox  
+4. Run Lighthouse and fix any contrast/performance flags  
