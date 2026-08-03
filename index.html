@@ -196,6 +196,8 @@
     .about-frame-wrap {
       position: relative;
       max-width: 420px;
+      width: 100%;
+      min-height: 360px;
     }
     .about-frame {
       position: absolute;
@@ -210,17 +212,26 @@
     .about-photo {
       position: relative;
       z-index: 1;
+      display: block;
       aspect-ratio: 4 / 5;
       object-fit: cover;
+      object-position: center top;
       width: 100%;
+      min-height: 360px;
+      height: auto;
+      background: #E4E4E4;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
       transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      /* Always visible — do not depend on scroll-reveal opacity */
+      opacity: 1 !important;
+      transform: none;
     }
     .reveal-about .about-frame {
       transform: translate(-12px, -12px);
     }
-    .reveal-about .about-photo {
-      transform: translate(8px, 8px);
+    .reveal-about.is-visible .about-photo,
+    #about .about-photo {
+      opacity: 1 !important;
     }
 
     /* Services split background */
@@ -554,15 +565,17 @@
         </div>
 
         <div class="reveal-about grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div class="about-frame-wrap mx-auto md:mx-0 reveal">
+          <div class="about-frame-wrap mx-auto md:mx-0">
             <div class="about-frame" aria-hidden="true"></div>
             <img
               class="about-photo"
-              src="assets/window-cleaner.jpg"
+              src="./assets/window-cleaner.jpg?v=3"
               alt="Young male window cleaner about 20 years old cleaning a large residential window with a squeegee"
-              width="800"
-              height="1067"
-              loading="lazy"
+              width="864"
+              height="1152"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
             />
           </div>
 
